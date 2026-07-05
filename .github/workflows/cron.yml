@@ -1,5 +1,15 @@
 name: Random Cron
 on:
+  workflow_dispatch:
+jobs:
+  disabled:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Random Cron disabled
+        run: |
+          echo "Random Cron disabled. Fixed schedule is managed in .github/workflows/run.yml"
+name: Random Cron
+on:
   workflow_run:
     workflows: ["刷步数"]
     types:
