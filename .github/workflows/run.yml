@@ -1,7 +1,7 @@
 name: 刷步数
 on:
   schedule:
-    - cron: '30 13 1-23 * *'
+    - cron: '30 13 1-23 * *' # UTC13:30 = 北京时间21:30，每月1~23号执行
   workflow_dispatch:
 permissions:
   contents: write
@@ -16,12 +16,10 @@ jobs:
         run: |
           sudo -E apt-get -qq update
           sudo -E apt-get install zsh -y
-
       - name: 初始化Python
         uses: actions/setup-python@v6
         with:
           python-version: "3.10"
-
       - name: 开始
         env:
           CONFIG: ${{ secrets.CONFIG }}
@@ -29,11 +27,16 @@ jobs:
         run: |
           pip3 install requests pytz pycryptodome
           python3 main.py
-
       - name: persist tokens
         run: |
           git config user.name github-actions
           git config user.email github-actions@users.noreply.github.com
           git add .
-          git commit -m "persist tokens trigger by ${{ github.event_name }}" || echo "nothing to commit"
-          git push origin master
+          # 文件无变更直接跳过提交推送，避免git冲突报错
+          if ! git diff --cached --quiet; then
+              git commit -m "persist tokens trigger by ${{ github.event_name }}"
+              git pull --rebase origin master
+              git push origin master
+          else
+              echo "无文件变更，跳过提交推送"
+          fi
