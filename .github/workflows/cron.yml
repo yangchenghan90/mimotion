@@ -1,14 +1,5 @@
 name: Random Cron
-on:
-  workflow_dispatch:
-jobs:
-  disabled:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Random Cron disabled
-        run: |
-          echo "Random Cron disabled. Fixed schedule is managed in .github/workflows/run.yml"
-name: Random Cron
+
 on:
   workflow_run:
     workflows: ["刷步数"]
@@ -24,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          token: ${{ secrets.PAT }} #此处PAT需要申请，教程详见：README
+          token: ${{ secrets.PAT }}
       - name: random cron
         run: |
           source cron_convert.sh
