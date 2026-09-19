@@ -1,8 +1,8 @@
 name: 刷步数
 on:
   schedule:
-    - cron: '30 13 * * *'
-    # UTC13:30 = 北京时间21:30，每天执行
+    - cron: '30 10 * * *'
+    # UTC10:30 = 北京时间18:30，每天执行
   workflow_dispatch:
 permissions:
   contents: write
